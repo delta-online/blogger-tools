@@ -1,3 +1,5 @@
+console.log('✅ course-load.js script loaded');
+
 (function waitForButton() {
   const loadBtn = document.getElementById('loadMoreCourses');
   const viewAllUrl = '/p/courses.html';
