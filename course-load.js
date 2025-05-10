@@ -10,15 +10,14 @@
   loadBtn.addEventListener('click', function (e) {
     e.preventDefault();
 
-    const hiddenCards = document.querySelectorAll('.hidden-course[style*="display: none"]');
+    const hiddenCards = document.querySelectorAll('.hidden-course.hidden');
 
-    // If 4 or more are still hidden before this click → show 3, then View All
     if (hiddenCards.length > 3) {
       for (let i = 0; i < 3; i++) {
-        if (hiddenCards[i]) hiddenCards[i].style.display = 'block';
+        if (hiddenCards[i]) hiddenCards[i].classList.remove('hidden');
       }
 
-      const remaining = document.querySelectorAll('.hidden-course[style*="display: none"]').length;
+      const remaining = document.querySelectorAll('.hidden-course.hidden').length;
 
       if (remaining > 3) {
         loadBtn.textContent = 'View All';
@@ -26,10 +25,8 @@
       }
 
     } else if (hiddenCards.length > 0 && hiddenCards.length <= 3) {
-      // Reveal all remaining hidden
-      hiddenCards.forEach(card => card.style.display = 'block');
+      hiddenCards.forEach(card => card.classList.remove('hidden'));
 
-      // No more to show? Replace button
       loadBtn.textContent = 'No more results';
       loadBtn.setAttribute('href', 'javascript:void(0)');
       loadBtn.classList.add('disabled');
