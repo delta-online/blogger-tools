@@ -1,6 +1,5 @@
 (function waitForButton() {
   const loadBtn = document.getElementById('loadMoreCourses');
-  const hiddenCards = document.querySelectorAll('.hidden-course');
   const viewAllUrl = '/p/courses.html';
 
   if (!loadBtn) {
@@ -8,15 +7,34 @@
     return;
   }
 
-  loadBtn.addEventListener('click', function(e) {
+  loadBtn.addEventListener('click', function (e) {
     e.preventDefault();
 
-    if (hiddenCards.length <= 3) {
+    const hiddenCards = document.querySelectorAll('.hidden-course[style*="display: none"]');
+
+    // If 4 or more are still hidden before this click → show 3, then View All
+    if (hiddenCards.length > 3) {
+      for (let i = 0; i < 3; i++) {
+        if (hiddenCards[i]) hiddenCards[i].style.display = 'block';
+      }
+
+      const remaining = document.querySelectorAll('.hidden-course[style*="display: none"]').length;
+
+      if (remaining > 3) {
+        loadBtn.textContent = 'View All';
+        loadBtn.setAttribute('href', viewAllUrl);
+      }
+
+    } else if (hiddenCards.length > 0 && hiddenCards.length <= 3) {
+      // Reveal all remaining hidden
       hiddenCards.forEach(card => card.style.display = 'block');
-      loadBtn.style.display = 'none';
-    } else {
-      loadBtn.textContent = 'View All';
-      loadBtn.setAttribute('href', viewAllUrl);
+
+      // No more to show? Replace button
+      loadBtn.textContent = 'No more results';
+      loadBtn.setAttribute('href', 'javascript:void(0)');
+      loadBtn.classList.add('disabled');
+      loadBtn.style.opacity = '0.6';
+      loadBtn.style.pointerEvents = 'none';
     }
   });
 })();
